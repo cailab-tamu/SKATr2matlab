@@ -1,0 +1,1 @@
+SSD_FILE_OPEN.isOpen = 0
