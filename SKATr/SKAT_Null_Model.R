@@ -4,8 +4,8 @@ SKAT_Null_Model = function(formula, data=NULL, out_type="C", n.Resampling=0, typ
 
 
 	# check missing
-	obj1<-model.frame(formula,na.action = na.omit,data)
-	obj2<-model.frame(formula,na.action = na.pass,data)
+	obj1<-model.frame(y.c ~ X,na.action = na.omit)
+	obj2<-model.frame(y.c ~ X,na.action = na.pass)
 
 	n<-dim(obj2)[1]
 	n1<-dim(obj1)[1]

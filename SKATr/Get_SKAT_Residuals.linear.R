@@ -1,8 +1,8 @@
 Get_SKAT_Residuals.linear = function(formula, data, n.Resampling, type.Resampling, id_include ){
 
 
- 	mod = lm(formula, data=data)
-	X1<-model.matrix(formula,data=data)
+ 	mod = lm(y.c ~ X)
+	X1<-model.matrix(lm(y.c ~ X))
 
   	s2 = summary(mod)$sigma**2
   	res = mod$resid
