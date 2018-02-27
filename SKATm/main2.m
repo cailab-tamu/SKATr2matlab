@@ -19,8 +19,20 @@ Q = Q_temp * Q_temp'/s2/2;
 W_1 = Z' * Z - (Z' * X1) * inv(X1' * X1) * (X1' * Z);
 
 
+% Denote Y as the n-vector of binary outcomes, X a n × p matrix of covariates (intercept included) to be adjusted, and 
+% G the n × m matrix of genotype scores for m variants measured in a gene region. 
+% Denote the n-vector of residuals Z = Y – Ŷ, where Ŷ are the fitted probabilities under the null model: log[Pr(Y = 1)/Pr(Y = 0)] = Xα. 
+% Denote the n × n null covariance matrix V = Cov(Z), and 
+% a m × m diagonal weight matrix W, which is typically determined by the variant MAF.
+% The SKAT statistic is defined as Q = Z′GWWG′Z. Under the null hypothesis Q asymptotically follows the mixture of one degree of freedom (1-DF) χ2 
+% distributions with the mixing coefficients being the positive eigen values of K = V1/2GWWG′V1/2 (Wu et al., 2010, 2011).
+% -- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4761292/
+
+
 
 %% Get_Davies_PVal
+
+% The Davies’ method has been implemented in the ‘CompQuadForm’ R package (Lafaye De Micheaux, 2013).
 K = W_1/2;
 
 %% Get Lambda
