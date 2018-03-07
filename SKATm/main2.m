@@ -38,6 +38,15 @@ Q=res'*Z*W*W*Z'*res;
 Q=Q/s2/2;
 
 % assert(Qx==Q);
+% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4158946/
+
+%%
+
+R=W*Z'*
+
+U=W*Z'*res;
+Q2=U'*U./s2/2;
+
 
 %% Get_Davies_PVal
 
