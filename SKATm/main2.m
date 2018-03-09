@@ -1,16 +1,17 @@
-load example_data.mat y X Z
+load example_data.mat y X G
+G=Z;
 
 % y 2000x1 response variable
 % X 2000x2 covariate matrix
-% Z 2000x67 genotype matrix
+% G 2000x67 genotype matrix
 
 % SKAT_Null_Model Function
 mdl=fitlm(X,y);
-res=mdl.Residuals.Raw;
+Z=mdl.Residuals.Raw;
 s2=mdl.RMSE^2;     % root-mean-square error (RMSE) or deviation (RMSD)
 X1=x2fx(X);
 
-maf=mean(Z)/2;
+maf=mean(G)/2;
 % Beta Weights function
 weights=betapdf(maf,1,25);
 
@@ -20,21 +21,21 @@ weights=betapdf(maf,1,25);
 %% KMTest_Linear_Linear
 
 % R translation
-Zx=Z.*weights;
-Q_temp=res'*Zx;
+Gw=G.*weights;
+Q_temp=Z'*Gw;
 Qx=Q_temp*Q_temp'/s2/2;
 
 % Denote Y as the n-vector of binary outcomes, X a n × p matrix of covariates (intercept included) to be adjusted, and 
 % G the n × m matrix of genotype scores for m variants measured in a gene region. 
-% Denote the n-vector of residuals Z = Y – Ŷ, where Ŷ are the fitted probabilities under the null model: log[Pr(Y = 1)/Pr(Y = 0)] = Xα. 
-% Denote the n × n null covariance matrix V = Cov(Z), and 
+% Denote the n-vector of residuals G = Y – Ŷ, where Ŷ are the fitted probabilities under the null model: log[Pr(Y = 1)/Pr(Y = 0)] = Xα. 
+% Denote the n × n null covariance matrix V = Cov(G), and 
 % a m × m diagonal weight matrix W, which is typically determined by the variant MAF.
-% The SKAT statistic is defined as Q = Z′GWWG′Z. Under the null hypothesis Q asymptotically follows the mixture of one degree of freedom (1-DF) χ2 
+% The SKAT statistic is defined as Q = Z′GWWG′G. Under the null hypothesis Q asymptotically follows the mixture of one degree of freedom (1-DF) χ2 
 % distributions with the mixing coefficients being the positive eigen values of K = V1/2GWWG′V1/2 (Wu et al., 2010, 2011).
 % -- https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4761292/
 
 W=diag(weights);
-Q=res'*Z*W*W*Z'*res;
+Q=Z'*G*W*W*G'*Z;
 Q=Q/s2/2;
 
 % assert(Qx==Q);
@@ -42,9 +43,7 @@ Q=Q/s2/2;
 
 %%
 
-R=W*Z'*
-
-U=W*Z'*res;
+U=W*G'*Z;
 Q2=U'*U./s2/2;
 
 
@@ -88,3 +87,5 @@ sigmaX = sqrt(2) *a;
 Q_Norm = (Q - muQ)/sigmaQ;
 Q_Norm1 = Q_Norm * sigmaX + muX;
 pValue = 1-ncx2cdf(Q_Norm1,l,d)
+
+
